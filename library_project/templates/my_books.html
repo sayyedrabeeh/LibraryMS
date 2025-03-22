@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4">My Borrowed Books</h2>
+            
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Book Title</th>
+                            <th>Author</th>
+                            <th>Borrow Date</th>
+                            <th>Return Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                            <tr>
+                                <td>{{ record.book.title }}</td>
+                                <td>{{ record.book.author }}</td>
+                                <td>{{ record.borrow_date|date:"M d, Y" }}</td>
+                                <td>
+                                    {% if record.return_date %}
+                                        {{ record.return_date|date:"M d, Y" }}
+                                    {% else %}
+                                        <span class="text-danger">Not returned</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if not record.return_date %}
+                                        <a href="{% url 'return_book' record.id %}" class="btn btn-sm btn-success">Return Book</a>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Returned</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">You have not borrowed any books yet.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

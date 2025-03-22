@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+{% load static %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Welcome to the Library Management System</h1>
+                <p class="lead">Browse our collection of books and start reading today!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Search Bar -->
+    <div class="row mb-4">
+        <div class="col-md-6 mx-auto">
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search books...">
+                <button class="btn btn-primary" type="button">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Books Display -->
+    <div class="row" id="booksContainer">
+        {% for book in books %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="book-image">
+                            {% if book.image %}
+                             <img src="{{ book.image.url }}" height="100" alt="{{ book.title }}">
+                                {% else %}
+                                    <img src="{% static 'images/1.jpeg' %}" height="100" alt="Default Book">
+                                {% endif %}
+
+                        </div>
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                        {% if book.is_availible %}
+                            <p class="book-available">Available</p>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary">Borrow</a>
+                            {% endif %}
+                        {% else %}
+                            <p class="book-borrowed">Currently Borrowed</p>
+                        {% endif %}
+                        
+                        {% if user.is_staff %}
+                            <a href="{% url 'delete_book' book.id %}" class="btn btn-outline-danger mt-2">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center">
+                <p>No books available in the library.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    // Simple search functionality
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        let input = this.value.toLowerCase();
+        let cards = document.querySelectorAll('.card');
+        
+        cards.forEach(function(card) {
+            let title = card.querySelector('.card-title').textContent.toLowerCase();
+            let author = card.querySelector('.card-subtitle').textContent.toLowerCase();
+            
+            if (title.includes(input) || author.includes(input)) {
+                card.parentElement.style.display = '';
+            } else {
+                card.parentElement.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
