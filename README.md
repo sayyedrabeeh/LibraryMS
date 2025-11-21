@@ -46,10 +46,25 @@ Welcome to the **Library Management System** — a full-stack Django web applica
 Add screenshot images in your GitHub repo (for example in `/assets/` or `/docs/`) and reference them here. For example:
 
 ![Homepage](home.png)  
-*Home page showing list of books*
+***Home page showing list of books***
 
 ![Borrow Book](borrowbook.png)  
-*Borrow confirmation modal*
+***Borrow***
+
+![Borrow Book page](borrowpage.png)  
+***My books***
+
+ 
+![Add Books ](addbook.png)  
+***Add  books Page***
+
+ 
+ 
+![Borrow Book page](books1.png)  
+***Avalibe and non availible***
+
+![Borrow Book page](books.png)  
+***books***
 
  
 
