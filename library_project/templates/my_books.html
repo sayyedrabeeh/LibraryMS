@@ -142,6 +142,24 @@
             background: rgba(255, 255, 255, 0.3);
             color: white;
         }
+         .book-image-container {
+            background-color: var(--bg-light);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book-image-container img {
+            max-height: 200px;
+            max-width: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -173,13 +191,13 @@
                     <tbody>
                         {% for record in records %}
                             <tr>
-                                <td class="book-image-container">
-                        {% if record.image %}
-                            <img src="{{ record.image.url }}" alt="{{ record.title }}">
-                        {% else %}
-                            <img src="{% static 'images/1.jpeg' %}" alt="Default Book">
-                        {% endif %}
-                    </td>
+                              <td class="book-image-container">
+                                {% if record.book.image %}
+                                    <img src="{{ record.book.image.url }}" alt="{{ record.book.title }}">
+                                {% else %}
+                                    <img src="{% static 'images/1.jpeg' %}" alt="Default Book">
+                                {% endif %}
+                            </td>
                                 <td>{{ record.book.title }}</td>
                                 <td>{{ record.book.author }}</td>
                                 <td>{{ record.borrow_date|date:"M d, Y" }}</td>
