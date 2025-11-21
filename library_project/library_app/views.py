@@ -64,6 +64,9 @@ def delete_book(request, book_id):
 
 
 def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -77,6 +80,9 @@ def signup_view(request):
 
 # Login
 def login_view(request):
+    if request.user.is_authenticated:
+       return redirect('home')
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
