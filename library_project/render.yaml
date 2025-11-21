@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: library-management
+    env: python
+    region: oregon
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn library_project.wsgi:application"
+    disk:
+      name: sqlite_disk
+      mountPath: /data
+      sizeGB: 1
