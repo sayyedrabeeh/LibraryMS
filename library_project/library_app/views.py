@@ -98,3 +98,15 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+def create_admin(request):
+    User.objects.create_superuser(
+        username="admin",
+        email="admin@example.com",
+        password="admin"
+    )
+    return HttpResponse("Superuser created!")
