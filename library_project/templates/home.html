@@ -1,85 +1,502 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<!-- Hero Section -->
 {% load static %}
-<div class="hero-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <h1>Welcome to the Library Management System</h1>
-                <p class="lead">Browse our collection of books and start reading today!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+            background-color: #fff;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            margin: 0 0.5rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: white !important;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section .lead {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Search Section */
+        .search-section {
+            background-color: var(--bg-light);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .search-input-group {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input-group .form-control {
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .search-input-group .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+
+        .search-input-group .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 0 8px 8px 0;
+            background-color: var(--secondary-color);
+            border: none;
+            font-weight: 600;
+        }
+
+        .search-input-group .btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Book Cards */
+        .book-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            height: 100%;
+            overflow: hidden;
+            background: white;
+        }
+
+        .book-card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transform: translateY(-4px);
+        }
+
+        .book-image-container {
+            background-color: var(--bg-light);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book-image-container img {
+            max-height: 200px;
+            max-width: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .book-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .book-card .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            min-height: 60px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-card .card-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-available {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-borrowed {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-borrow {
+            background-color: var(--secondary-color);
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-borrow:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-delete {
+            border: 2px solid #dc2626;
+            color: #dc2626;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 0.5rem;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--text-dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-book-open"></i>
+                Library Management System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'home' %}">Home</a>
+                    </li>
+                     {% if user.is_staff %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'add_book' %}">Add Book</a>
+                            </li>
+                        {% endif %}
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My Borrowings</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user"></i> {{ user.username }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="container">
-    <!-- Search Bar -->
-    <div class="row mb-4">
-        <div class="col-md-6 mx-auto">
-            <div class="input-group">
-                <input type="text" class="form-control" id="searchInput" placeholder="Search books...">
-                <button class="btn btn-primary" type="button">Search</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Books Display -->
-    <div class="row" id="booksContainer">
-        {% for book in books %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="book-image">
-                            {% if book.image %}
-                             <img src="{{ book.image.url }}" height="100" alt="{{ book.title }}">
-                                {% else %}
-                                    <img src="{% static 'images/1.jpeg' %}" height="100" alt="Default Book">
-                                {% endif %}
-
+    </nav>
+    <div class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1>Welcome to the Library Management System</h1>
+                    <p class="lead">Discover, borrow, and enjoy thousands of books from our extensive collection</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ total_books|default:"0" }}</span>
+                            <span class="stat-label">Books Available</span>
                         </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ available_books|default:"0" }}</span>
+                            <span class="stat-label">Currently Available</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Access</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="search-section">
+            <div class="search-input-group input-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search by title or author...">
+                <button class="btn btn-primary" type="button">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+        <div class="section-header">
+            <h2>Available Books</h2>
+            <p>Browse through our collection and find your next great read</p>
+        </div>
+
+        <div class="row" id="booksContainer">
+            {% for book in books %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card book-card">
+                    <div class="book-image-container">
+                        {% if book.image %}
+                            <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                        {% else %}
+                            <img src="{% static 'images/1.jpeg' %}" alt="Default Book">
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
                         <h5 class="card-title">{{ book.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                        <h6 class="card-subtitle">{{ book.author }}</h6>
+                        
                         {% if book.is_availible %}
-                            <p class="book-available">Available</p>
+                            <span class="status-badge status-available">
+                                <i class="fas fa-check-circle"></i> Available
+                            </span>
                             {% if user.is_authenticated %}
-                                <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary">Borrow</a>
+                                <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary btn-borrow">
+                                    <i class="fas fa-book-reader"></i> Borrow Book
+                                </a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-primary btn-borrow">
+                                    <i class="fas fa-sign-in-alt"></i> Login to Borrow
+                                </a>
                             {% endif %}
                         {% else %}
-                            <p class="book-borrowed">Currently Borrowed</p>
+                            <span class="status-badge status-borrowed">
+                                <i class="fas fa-times-circle"></i> Currently Borrowed
+                            </span>
                         {% endif %}
                         
                         {% if user.is_staff %}
-                            <a href="{% url 'delete_book' book.id %}" class="btn btn-outline-danger mt-2">Delete</a>
+                            <a href="{% url 'delete_book' book.id %}" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this book?');">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
                         {% endif %}
                     </div>
                 </div>
             </div>
-        {% empty %}
-            <div class="col-12 text-center">
-                <p>No books available in the library.</p>
+            {% empty %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="fas fa-book"></i>
+                    <h3>No Books Available</h3>
+                    <p>There are currently no books in the library. Please check back later.</p>
+                </div>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-book-open"></i> Library System</h5>
+                    <p class="text-white-50">Your gateway to knowledge and learning. Access thousands of books anytime, anywhere.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Books Collection</a></li>
+                        <li><a href="#">Membership</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact Info</h5>
+                    <ul class="list-unstyled text-white-50">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Library Street</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope"></i> info@library.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {% now "Y" %} Library Management System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-<script>
-    // Simple search functionality
-    document.getElementById('searchInput').addEventListener('keyup', function() {
-        let input = this.value.toLowerCase();
-        let cards = document.querySelectorAll('.card');
-        
-        cards.forEach(function(card) {
-            let title = card.querySelector('.card-title').textContent.toLowerCase();
-            let author = card.querySelector('.card-subtitle').textContent.toLowerCase();
-            
-            if (title.includes(input) || author.includes(input)) {
-                card.parentElement.style.display = '';
-            } else {
-                card.parentElement.style.display = 'none';
-            }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let input = this.value.toLowerCase();
+            let cards = document.querySelectorAll('.book-card');
+            cards.forEach(function(card) {
+                let title = card.querySelector('.card-title').textContent.toLowerCase();
+                let author = card.querySelector('.card-subtitle').textContent.toLowerCase();
+                if (title.includes(input) || author.includes(input)) {
+                    card.parentElement.style.display = '';
+                } else {
+                    card.parentElement.style.display = 'none';
+                }
+            });
         });
-    });
-</script>
-{% endblock %}
+        document.querySelector('.search-input-group .btn').addEventListener('click', function() {
+            document.getElementById('searchInput').dispatchEvent(new Event('keyup'));
+        });
+    </script>
+</body>
+</html>
