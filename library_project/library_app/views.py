@@ -11,7 +11,15 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 def home(request):
     books = Book.objects.all()
-    return render(request,'home.html',{"books":books})
+
+    total_books = books.count()
+    available_books = books.filter(is_availible=True).count()
+
+    return render(request, 'home.html', {
+        "books": books,
+        "total_books": total_books,
+        "available_books": available_books
+    })
 
 @login_required
 def borrow_book(request,book_id):
